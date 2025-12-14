@@ -44,12 +44,12 @@
         }
 
         .container {
-            max-width: 1200px; /* Wider for 2-column layout */
+            max-width: 1400px; /* Wider for 3-column layout */
             width: 100%;
             background: var(--card-bg);
             border-radius: 20px;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.1);
-            padding: 40px;
+            padding: 30px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
@@ -110,13 +110,18 @@
         /* New Wrapper for Side-by-Side Layout */
         .content-wrapper {
             display: flex;
-            gap: 30px;
+            gap: 20px;
             align-items: flex-start;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1100px) {
             .content-wrapper {
                 flex-direction: column;
+                align-items: center;
+            }
+            .diagram-container, .workflow-steps, .phone-column {
+                width: 100%;
+                margin-bottom: 20px;
             }
         }
 
@@ -124,22 +129,257 @@
             flex: 2; /* Takes up more space */
             background: rgba(255, 255, 255, 0.95);
             border-radius: 16px;
-            padding: 24px;
+            padding: 20px;
             display: flex;
             justify-content: center;
+            align-items: center;
             overflow-x: auto;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-            min-height: 500px; /* Ensure height matches steps roughly */
+            min-height: 500px;
         }
 
         .workflow-steps {
             flex: 1; /* Takes up less space */
             background: rgba(15, 23, 42, 0.5);
             border-radius: 12px;
-            padding: 24px;
+            padding: 20px;
             border: 1px solid rgba(255,255,255,0.05);
-            max-height: 800px;
-            overflow-y: auto; /* Scrollable if too long */
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        /* Phone Column Styles */
+        .phone-column {
+            flex: 1.2; /* Widened for two phones */
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap; /* Stack if needed */
+        }
+
+        .phone-mockup {
+            width: 100%;
+            max-width: 300px;
+            height: 580px;
+            background: #1e293b;
+            border-radius: 36px;
+            padding: 12px;
+            box-shadow: 0 20px 50px -10px rgba(0,0,0,0.5), inset 0 0 0 2px #334155;
+            position: relative;
+        }
+
+        .phone-mockup::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 24px;
+            background: #0f172a;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            z-index: 20;
+        }
+
+        .phone-screen {
+            background: #f8fafc;
+            width: 100%;
+            height: 100%;
+            border-radius: 28px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .phone-header {
+            background: #ffffff;
+            padding: 35px 15px 15px 15px; /* Top padding for notch */
+            border-bottom: 1px solid #e2e8f0;
+            text-align: center;
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 1rem;
+            z-index: 10;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .chat-interface {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #f1f5f9;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            position: relative;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
+            transform: scale(0.9) translateY(10px);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        @keyframes popIn {
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .message.received {
+            background: #ffffff;
+            color: #334155;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.sent {
+            background: #8b5cf6;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .message.system {
+            align-self: center;
+            background: rgba(148, 163, 184, 0.2);
+            color: #64748b;
+            font-size: 0.75rem;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin: 10px 0;
+            box-shadow: none;
+            max-width: fit-content;
+        }
+
+        .typing-indicator {
+            align-self: flex-start;
+            background: #ffffff;
+            padding: 12px 16px;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            display: none; /* Hidden by default */
+            gap: 4px;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            width: fit-content;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: #94a3b8;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Feature Phone Styles */
+        .feature-phone-mockup {
+            width: 100%;
+            max-width: 220px;
+            height: 480px;
+            background: #334155;
+            border-radius: 30px;
+            padding: 15px;
+            box-shadow: 0 20px 50px -10px rgba(0,0,0,0.5), inset 0 0 0 2px #475569;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .feature-screen-frame {
+            background: #cbd5e1;
+            padding: 10px;
+            border-radius: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .feature-screen {
+            background: #84cc16; /* LCD Green */
+            width: 100%;
+            height: 140px;
+            border: 2px solid #65a30d;
+            font-family: 'Courier New', monospace;
+            padding: 8px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            color: #1e293b;
+            font-size: 0.8rem;
+            line-height: 1.2;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .feature-keypad {
+            flex: 1;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 10px 0;
+        }
+
+        .key-btn {
+            background: #475569;
+            border-radius: 6px;
+            height: 35px;
+            box-shadow: 0 4px 0 #1e293b, 0 5px 5px rgba(0,0,0,0.2);
+            border: none;
+            color: #94a3b8;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn-group {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0 10px;
+            margin-bottom: 5px;
+        }
+        
+        .nav-btn {
+            width: 40px;
+            height: 15px;
+            background: #cbd5e1;
+            border-radius: 4px;
+            box-shadow: 0 2px 0 #94a3b8;
+        }
+
+        .feature-message {
+            margin-bottom: 4px;
+        }
+        
+        .feature-message.sent {
+            text-align: right;
+        }
+        
+        .feature-message.sent::before {
+            content: '> ';
+        }
+
+        .feature-message.received {
+            text-align: left;
         }
 
         .workflow-steps h2 {
@@ -262,7 +502,7 @@
                 </div>
             </div>
 
-            <!-- Right Column: Steps -->
+            <!-- Middle Column: Steps -->
             <div class="workflow-steps">
                 <h2>Live Logic Flow</h2>
                 <div class="step" id="step-A">
@@ -272,46 +512,100 @@
                         <span class="step-desc">User sends "Hi" from feature phone.</span>
                     </div>
                 </div>
+                <!-- Steps B-D -->
                 <div class="step" id="step-B">
                     <div class="step-number">2</div>
                     <div class="step-content">
                         <span class="step-title">Gateway Trigger</span>
-                        <span class="step-desc">Twilio receives message and hits server webhook.</span>
+                        <span class="step-desc">Twilio receives message.</span>
                     </div>
                 </div>
                 <div class="step" id="step-C">
                     <div class="step-number">3</div>
                     <div class="step-content">
                         <span class="step-title">Server Logic</span>
-                        <span class="step-desc">Python server processes the request.</span>
+                        <span class="step-desc">Python server request.</span>
                     </div>
                 </div>
                 <div class="step" id="step-D">
                     <div class="step-number">4</div>
                     <div class="step-content">
                         <span class="step-title">Check Context</span>
-                        <span class="step-desc">Determining if this is a new or returning user.</span>
+                        <span class="step-desc">User lookup in DB.</span>
                     </div>
                 </div>
+                <!-- Steps G-J -->
                 <div class="step" id="step-G">
                     <div class="step-number">5</div>
                     <div class="step-content">
                         <span class="step-title">Prepare Context</span>
-                        <span class="step-desc">Loading chat history for the AI model.</span>
+                        <span class="step-desc">Load chat history.</span>
                     </div>
                 </div>
                 <div class="step" id="step-H">
                     <div class="step-number">6</div>
                     <div class="step-content">
                         <span class="step-title">Gemini AI</span>
-                        <span class="step-desc">Google Gemini generates a smart response.</span>
+                        <span class="step-desc">Generates response.</span>
                     </div>
                 </div>
                 <div class="step" id="step-J">
                     <div class="step-number">7</div>
                     <div class="step-content">
                         <span class="step-title">Send Reply</span>
-                        <span class="step-desc">Response delivered back to the user's phone.</span>
+                        <span class="step-desc">Response delivered.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Phone Simulation -->
+            <!-- Right Column: Phone Simulation -->
+            <div class="phone-column">
+                <!-- Smart Phone -->
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <div class="phone-header">
+                            <span>Kaduda Bot</span>
+                        </div>
+                        <div class="chat-interface" id="chatContainer">
+                            <div class="message system">
+                                Today 12:45 PM
+                            </div>
+                            <!-- Messages will appear here -->
+                            <div class="typing-indicator" id="typingIndicator">
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature Phone (Nokia Style) -->
+                <div class="feature-phone-mockup">
+                    <div class="feature-screen-frame">
+                        <div class="feature-screen" id="featureChatContainer">
+                            <div>-- SMS --</div>
+                            <!-- Messages will appear here -->
+                        </div>
+                    </div>
+                    <div class="nav-btn-group">
+                        <div class="nav-btn"></div>
+                        <div class="nav-btn"></div>
+                    </div>
+                    <div class="feature-keypad">
+                        <button class="key-btn">1</button>
+                        <button class="key-btn">2</button>
+                        <button class="key-btn">3</button>
+                        <button class="key-btn">4</button>
+                        <button class="key-btn">5</button>
+                        <button class="key-btn">6</button>
+                        <button class="key-btn">7</button>
+                        <button class="key-btn">8</button>
+                        <button class="key-btn">9</button>
+                        <button class="key-btn">*</button>
+                        <button class="key-btn">0</button>
+                        <button class="key-btn">#</button>
                     </div>
                 </div>
             </div>
@@ -320,31 +614,15 @@
 
     <script>
         const steps = [
-            { id: 'A', text: 'Kaambe Phone SMS' },
+            { id: 'A', text: 'Kaambe Phone SMS', message: { type: 'sent', text: 'Hi, I found spots on my maize leaves.' } },
             { id: 'B', text: 'Twilio Gateway' },
             { id: 'C', text: 'Python Server' },
             { id: 'D', text: 'New Number?' },
-            { id: 'E', text: 'Create New Chat History' }, // Text from graph definition
-            { id: 'F', text: 'Load Previous Chat History' }, // Text from graph definition
-            { id: 'G', text: 'Update Context' }, // Adjust to match graph: "Add 'Hi...'" or "Update History" - wait, let's check the graph again.
-            // Graph says: E --> G[Add 'Hi, I'm John' to History]. F --> G. 
-            // Actually G is "Add 'Hi, I'm John' to History" in the TD version?
-            // Let's check the file content just read.
-            // The previous file write had: 
-            // E --> G[Add 'Hi, I'm John' to History]
-            // F --> G
-            // G -->|Send Full History| H[Google Gemini API]
-            // But in the "Vibrant Styles" section I might have simplified it?
-            // Step 99 write had:
-            // E[Create History]
-            // F[Load History]
-            // G[Update Context]
-            // H[Gemini API]
-            // So I should use "Update Context"
+            { id: 'E', text: 'Create New Chat History' },
             { id: 'G', text: 'Update Context' },
-            { id: 'H', text: 'Gemini API' },
-            { id: 'I', text: 'Process Reply' }, // I[Process Reply]
-            { id: 'J', text: 'Send SMS' },
+            { id: 'H', text: 'Gemini AI', action: 'typing_start' },
+            { id: 'I', text: 'Process Reply' }, 
+            { id: 'J', text: 'Send SMS', action: 'typing_stop', message: { type: 'received', text: 'It sounds like Maize Leaf Blight. I recommend using a fungicide and rotating crops next season.' } },
             { id: 'B', text: 'Twilio Gateway' },
             { id: 'A', text: 'Kaambe Phone SMS' }
         ];
@@ -354,21 +632,84 @@
             btn.disabled = true;
             btn.textContent = 'Simulating...';
 
-            // Reset all
-            document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
-            clearDiagramHighlights();
+            // Reset UI
+            resetSimulation();
             
             for (let i = 0; i < steps.length; i++) {
                 const step = steps[i];
                 highlightStep(step.id);
                 highlightDiagramNode(step.text);
-                await new Promise(r => setTimeout(r, 1200)); // Slightly slower for viewing
+                
+                // Handle Messages
+                if (step.message) {
+                    addChatMessage(step.message.text, step.message.type);
+                }
+
+                // Handle Actions (Typing Indicator)
+                if (step.action === 'typing_start') {
+                    document.getElementById('typingIndicator').style.display = 'flex';
+                    scrollToBottom();
+                } else if (step.action === 'typing_stop') {
+                    document.getElementById('typingIndicator').style.display = 'none';
+                }
+
+                await new Promise(r => setTimeout(r, 1500)); 
             }
 
             btn.disabled = false;
             btn.textContent = '▶ Run Simulation';
+            
+            // Cleanup highlights after done
+            setTimeout(() => {
+                document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+                clearDiagramHighlights();
+            }, 2000);
+        }
+
+        function resetSimulation() {
             document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
             clearDiagramHighlights();
+            // Clear messages except system message and typing indicator
+            const container = document.getElementById('chatContainer');
+            const systemMsg = container.querySelector('.message.system');
+            const typingInd = container.querySelector('.typing-indicator');
+            
+            container.innerHTML = '';
+            if(systemMsg) container.appendChild(systemMsg);
+            if(typingInd) {
+                typingInd.style.display = 'none';
+                container.appendChild(typingInd);
+            }
+
+            // Reset Feature Phone
+            const featContainer = document.getElementById('featureChatContainer');
+            featContainer.innerHTML = '<div>-- SMS --</div>';
+        }
+
+        function addChatMessage(text, type) {
+            // 1. Update Smartphone
+            const container = document.getElementById('chatContainer');
+            const typingIndicator = document.getElementById('typingIndicator');
+            
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${type}`;
+            msgDiv.textContent = text;
+            
+            container.insertBefore(msgDiv, typingIndicator);
+            scrollToBottom();
+
+            // 2. Update Feature Phone
+            const featContainer = document.getElementById('featureChatContainer');
+            const featMsg = document.createElement('div');
+            featMsg.className = `feature-message ${type}`;
+            featMsg.textContent = text;
+            featContainer.appendChild(featMsg);
+            featContainer.scrollTop = featContainer.scrollHeight;
+        }
+
+        function scrollToBottom() {
+            const container = document.getElementById('chatContainer');
+            container.scrollTop = container.scrollHeight;
         }
 
         function highlightStep(nodeId) {

@@ -75,6 +75,7 @@ This repository contains a **High-Fidelity Interactive Preview** of the workflow
     *   Watch the process flow step-by-step.
     *   The diagram nodes will **light up** in emerald green as the data flows through them.
     *   The "Live Logic Flow" sidebar will explain exactly what is happening at each step.
+    *   **New! Phone Simulation**: Watch the conversation unfold in real-time on both a **Modern Smartphone** and a **Retro Feature Phone** to see how the bot answers on different devices.
 
 ---
 
