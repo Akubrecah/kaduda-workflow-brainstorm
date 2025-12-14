@@ -34,6 +34,34 @@ The system operates on a seamless loop between the user, the telecom gateway, an
     *   **Shortener Logic**: The server truncates or summarizes the reply to <160 characters to save SMS costs and ensure delivery.
 6.  **Delivery**: The message is routed back through Twilio to the user's phone.
 
+### Visual Workflow
+
+```mermaid
+graph TD
+    A[Kaambe Phone SMS] -->|Text: 'Hi, I'm John'| B(Twilio Gateway)
+    B -->|Forward to| C{Your Python Server}
+    
+    C -->|Check Memory| D{New Number?}
+    D -- Yes --> E[Create New Chat History]
+    D -- No --> F[Load Previous Chat History]
+    
+    E --> G[Add 'Hi, I'm John' to History]
+    F --> G
+    
+    G -->|Send Full History| H[Google Gemini API]
+    H -->|Reply: 'Hello John!'| I[Update History with Reply]
+    
+    I -->|Shorten Text < 160 chars| J[Send Reply]
+    J --> B
+    B --> A
+
+    %% Styling
+    style A fill:#dbeafe,stroke:#2563eb,stroke-width:2px
+    style H fill:#fce7f3,stroke:#db2777,stroke-width:2px
+    style B fill:#f3f4f6,stroke:#4b5563
+    style J fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+```
+
 ---
 
 ## 🚀 Visualization & Simulation
