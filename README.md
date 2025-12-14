@@ -69,7 +69,7 @@ graph TD
 This repository contains a **High-Fidelity Interactive Preview** of the workflow.
 
 ### How to Use
-1.  Open `demo.html` in any modern web browser.
+1.  Open `index.html` (or the root URL) in any modern web browser.
 2.  **View the Diagram**: A clear, Mermaid.js-powered flowchart on the left.
 3.  **Run Simulation**: Click the **▶ Run Simulation** button.
     *   Watch the process flow step-by-step.
