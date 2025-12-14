@@ -44,7 +44,7 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1200px; /* Wider for 2-column layout */
             width: 100%;
             background: var(--card-bg);
             border-radius: 20px;
@@ -80,7 +80,7 @@
 
         .simulation-controls {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         button#simulateBtn {
@@ -107,22 +107,39 @@
             transform: none;
         }
 
+        /* New Wrapper for Side-by-Side Layout */
+        .content-wrapper {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        @media (max-width: 900px) {
+            .content-wrapper {
+                flex-direction: column;
+            }
+        }
+
         .diagram-container {
-            background: rgba(255, 255, 255, 0.95); /* Keep diagram bright for readability */
+            flex: 2; /* Takes up more space */
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 16px;
             padding: 24px;
             display: flex;
             justify-content: center;
             overflow-x: auto;
-            margin-bottom: 40px;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            min-height: 500px; /* Ensure height matches steps roughly */
         }
 
         .workflow-steps {
+            flex: 1; /* Takes up less space */
             background: rgba(15, 23, 42, 0.5);
             border-radius: 12px;
             padding: 24px;
             border: 1px solid rgba(255,255,255,0.05);
+            max-height: 800px;
+            overflow-y: auto; /* Scrollable if too long */
         }
 
         .workflow-steps h2 {
@@ -202,96 +219,100 @@
             <button id="simulateBtn" onclick="runSimulation()">▶ Run Simulation</button>
         </div>
 
-        <div class="diagram-container">
-            <div class="mermaid" id="mermaidDiagram">
-                graph TD
-                A[Kaambe Phone SMS]
-                B(Twilio Gateway)
-                C{Python Server}
-                D{New Number?}
-                E[Create History]
-                F[Load History]
-                G[Update Context]
-                H[Gemini API]
-                I[Process Reply]
-                J[Send SMS]
+        <div class="content-wrapper">
+            <!-- Left Column: Diagram -->
+            <div class="diagram-container">
+                <div class="mermaid" id="mermaidDiagram">
+                    graph TD
+                    A[Kaambe Phone SMS]
+                    B(Twilio Gateway)
+                    C{Python Server}
+                    D{New Number?}
+                    E[Create History]
+                    F[Load History]
+                    G[Update Context]
+                    H[Gemini API]
+                    I[Process Reply]
+                    J[Send SMS]
 
-                A -->|'Hi'| B
-                B -->|Webhook| C
-                C -->|Check DB| D
-                
-                D -- Yes --> E
-                D -- No --> F
-                
-                E --> G
-                F --> G
-                
-                G -->|Context| H
-                H -->|Response| I
-                I -->|Shorten| J
-                J --> B
-                B --> A
+                    A -->|'Hi'| B
+                    B -->|Webhook| C
+                    C -->|Check DB| D
+                    
+                    D -- Yes --> E
+                    D -- No --> F
+                    
+                    E --> G
+                    F --> G
+                    
+                    G -->|Context| H
+                    H -->|Response| I
+                    I -->|Shorten| J
+                    J --> B
+                    B --> A
 
-                %% Vibrant Styles
-                classDef default fill:#ede9fe,stroke:#8b5cf6,color:#1e1b4b,stroke-width:2px;
-                classDef highlight fill:#d1fae5,stroke:#059669,stroke-width:4px,color:#064e3b;
-                
-                %% Node Specifics
-                style A fill:#bfdbfe,stroke:#2563eb
-                style H fill:#fbcfe8,stroke:#db2777
-                style J fill:#bbf7d0,stroke:#16a34a
+                    %% Vibrant Styles
+                    classDef default fill:#ede9fe,stroke:#8b5cf6,color:#1e1b4b,stroke-width:2px;
+                    classDef highlight fill:#d1fae5,stroke:#059669,stroke-width:4px,color:#064e3b;
+                    
+                    %% Node Specifics
+                    style A fill:#bfdbfe,stroke:#2563eb
+                    style H fill:#fbcfe8,stroke:#db2777
+                    style J fill:#bbf7d0,stroke:#16a34a
+                </div>
             </div>
-        </div>
 
-        <div class="workflow-steps">
-            <h2>Live Logic Flow</h2>
-            <div class="step" id="step-A">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                    <span class="step-title">Inbound SMS</span>
-                    <span class="step-desc">User sends "Hi" from feature phone.</span>
+            <!-- Right Column: Steps -->
+            <div class="workflow-steps">
+                <h2>Live Logic Flow</h2>
+                <div class="step" id="step-A">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <span class="step-title">Inbound SMS</span>
+                        <span class="step-desc">User sends "Hi" from feature phone.</span>
+                    </div>
                 </div>
-            </div>
-            <div class="step" id="step-B">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                    <span class="step-title">Gateway Trigger</span>
-                    <span class="step-desc">Twilio receives message and hits server webhook.</span>
+                <div class="step" id="step-B">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <span class="step-title">Gateway Trigger</span>
+                        <span class="step-desc">Twilio receives message and hits server webhook.</span>
+                    </div>
                 </div>
-            </div>
-            <div class="step" id="step-C">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                    <span class="step-title">Server Logic</span>
-                    <span class="step-desc">Python server processes the request.</span>
+                <div class="step" id="step-C">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <span class="step-title">Server Logic</span>
+                        <span class="step-desc">Python server processes the request.</span>
+                    </div>
                 </div>
-            </div>
-            <div class="step" id="step-D">
-                <div class="step-number">4</div>
-                <div class="step-content">
-                    <span class="step-title">Check Context</span>
-                    <span class="step-desc">Determining if this is a new or returning user.</span>
+                <div class="step" id="step-D">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <span class="step-title">Check Context</span>
+                        <span class="step-desc">Determining if this is a new or returning user.</span>
+                    </div>
                 </div>
-            </div>
-            <div class="step" id="step-G">
-                <div class="step-number">5</div>
-                <div class="step-content">
-                    <span class="step-title">Prepare Context</span>
-                    <span class="step-desc">Loading chat history for the AI model.</span>
+                <div class="step" id="step-G">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <span class="step-title">Prepare Context</span>
+                        <span class="step-desc">Loading chat history for the AI model.</span>
+                    </div>
                 </div>
-            </div>
-            <div class="step" id="step-H">
-                <div class="step-number">6</div>
-                <div class="step-content">
-                    <span class="step-title">Gemini AI</span>
-                    <span class="step-desc">Google Gemini generates a smart response.</span>
+                <div class="step" id="step-H">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <span class="step-title">Gemini AI</span>
+                        <span class="step-desc">Google Gemini generates a smart response.</span>
+                    </div>
                 </div>
-            </div>
-            <div class="step" id="step-J">
-                <div class="step-number">7</div>
-                <div class="step-content">
-                    <span class="step-title">Send Reply</span>
-                    <span class="step-desc">Response delivered back to the user's phone.</span>
+                <div class="step" id="step-J">
+                    <div class="step-number">7</div>
+                    <div class="step-content">
+                        <span class="step-title">Send Reply</span>
+                        <span class="step-desc">Response delivered back to the user's phone.</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -308,9 +329,6 @@
             // Reset all
             document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
             
-            // We need to wait for mermaid to render to access DOM nodes of the graph
-            // Simple approach: try to find nodes by text content or specific attributes that Mermaid adds
-            
             for (let i = 0; i < steps.length; i++) {
                 const nodeId = steps[i];
                 highlightStep(nodeId);
@@ -326,11 +344,11 @@
             // Highlight list item
             document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
             const listStep = document.getElementById(`step-${nodeId}`);
-            if (listStep) listStep.classList.add('active');
-
-            // Find mermaid node - this is tricky as mermaid generates complex SVGs with random IDs
-            // We'll rely on the `step-[ID]` visual matching mostly for this simple demo
-            // But we can try to find the node containing the text if we wanted to be fancy.
+            if (listStep) {
+                listStep.classList.add('active');
+                // Auto scroll to active step
+                listStep.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
         }
     </script>
 </body>
