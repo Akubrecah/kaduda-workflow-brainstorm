@@ -319,7 +319,35 @@
     </div>
 
     <script>
-        const steps = ['A', 'B', 'C', 'D', 'G', 'H', 'J', 'B', 'A'];
+        const steps = [
+            { id: 'A', text: 'Kaambe Phone SMS' },
+            { id: 'B', text: 'Twilio Gateway' },
+            { id: 'C', text: 'Python Server' },
+            { id: 'D', text: 'New Number?' },
+            { id: 'E', text: 'Create New Chat History' }, // Text from graph definition
+            { id: 'F', text: 'Load Previous Chat History' }, // Text from graph definition
+            { id: 'G', text: 'Update Context' }, // Adjust to match graph: "Add 'Hi...'" or "Update History" - wait, let's check the graph again.
+            // Graph says: E --> G[Add 'Hi, I'm John' to History]. F --> G. 
+            // Actually G is "Add 'Hi, I'm John' to History" in the TD version?
+            // Let's check the file content just read.
+            // The previous file write had: 
+            // E --> G[Add 'Hi, I'm John' to History]
+            // F --> G
+            // G -->|Send Full History| H[Google Gemini API]
+            // But in the "Vibrant Styles" section I might have simplified it?
+            // Step 99 write had:
+            // E[Create History]
+            // F[Load History]
+            // G[Update Context]
+            // H[Gemini API]
+            // So I should use "Update Context"
+            { id: 'G', text: 'Update Context' },
+            { id: 'H', text: 'Gemini API' },
+            { id: 'I', text: 'Process Reply' }, // I[Process Reply]
+            { id: 'J', text: 'Send SMS' },
+            { id: 'B', text: 'Twilio Gateway' },
+            { id: 'A', text: 'Kaambe Phone SMS' }
+        ];
         
         async function runSimulation() {
             const btn = document.getElementById('simulateBtn');
@@ -328,27 +356,66 @@
 
             // Reset all
             document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+            clearDiagramHighlights();
             
             for (let i = 0; i < steps.length; i++) {
-                const nodeId = steps[i];
-                highlightStep(nodeId);
-                await new Promise(r => setTimeout(r, 1000));
+                const step = steps[i];
+                highlightStep(step.id);
+                highlightDiagramNode(step.text);
+                await new Promise(r => setTimeout(r, 1200)); // Slightly slower for viewing
             }
 
             btn.disabled = false;
             btn.textContent = '▶ Run Simulation';
             document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+            clearDiagramHighlights();
         }
 
         function highlightStep(nodeId) {
-            // Highlight list item
             document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
             const listStep = document.getElementById(`step-${nodeId}`);
             if (listStep) {
                 listStep.classList.add('active');
-                // Auto scroll to active step
                 listStep.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
+        }
+
+        function highlightDiagramNode(textFragment) {
+            clearDiagramHighlights();
+            // Find all nodes in the mermaid diagram
+            const nodes = document.querySelectorAll('.mermaid .node');
+            
+            nodes.forEach(node => {
+                // Check if this node contains the text
+                if (node.textContent.includes(textFragment)) {
+                    // This is the one!
+                    // Find the shape (rect, polygon, circle) inside directly
+                    const shape = node.querySelector('rect, polygon, circle, path');
+                    if (shape) {
+                        // Store original fill if not stored
+                        if (!shape.hasAttribute('data-orig-style')) {
+                            shape.setAttribute('data-orig-style', shape.getAttribute('style') || '');
+                        }
+                        // Apply highlight style directly
+                        shape.style.fill = '#34d399'; // Emerald Highlight
+                        shape.style.stroke = '#064e3b';
+                        shape.style.strokeWidth = '3px';
+                        shape.style.filter = 'drop-shadow(0 0 5px #34d399)';
+                    }
+                }
+            });
+        }
+
+        function clearDiagramHighlights() {
+            const nodes = document.querySelectorAll('.mermaid .node');
+            nodes.forEach(node => {
+                const shape = node.querySelector('rect, polygon, circle, path');
+                if (shape && shape.hasAttribute('data-orig-style')) {
+                    // Restore
+                    shape.setAttribute('style', shape.getAttribute('data-orig-style'));
+                    shape.style.filter = '';
+                }
+            });
         }
     </script>
 </body>
