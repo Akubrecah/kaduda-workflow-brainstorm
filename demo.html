@@ -28,7 +28,7 @@
             --heading-color: #f8fafc;
             --card-bg: rgba(30, 41, 59, 0.8);
             --accent-color: #8b5cf6;
-            --highlight-color: #34d399; /* Emerald for active step */
+            --highlight-color: #ef4444; /* Red for active step */
         }
 
         body {
@@ -161,8 +161,8 @@
         }
 
         .step.active {
-            background: rgba(45, 212, 191, 0.2); /* Teal highlight */
-            border-left: 4px solid #2dd4bf;
+            background: rgba(239, 68, 68, 0.2); /* Red highlight */
+            border-left: 4px solid #ef4444;
         }
 
         .step-number {
@@ -397,10 +397,10 @@
                             shape.setAttribute('data-orig-style', shape.getAttribute('style') || '');
                         }
                         // Apply highlight style directly
-                        shape.style.fill = '#34d399'; // Emerald Highlight
-                        shape.style.stroke = '#064e3b';
+                        shape.style.fill = '#fca5a5'; // Red Highlight
+                        shape.style.stroke = '#7f1d1d';
                         shape.style.strokeWidth = '3px';
-                        shape.style.filter = 'drop-shadow(0 0 5px #34d399)';
+                        shape.style.filter = 'drop-shadow(0 0 5px #ef4444)';
                     }
                 }
             });
