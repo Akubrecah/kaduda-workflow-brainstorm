@@ -44,8 +44,8 @@
         }
 
         .container {
-            max-width: 1400px; /* Wider for 3-column layout */
-            width: 100%;
+            max-width: 1600px; /* Even wider layout */
+            width: 95%;
             background: var(--card-bg);
             border-radius: 20px;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.1);
@@ -67,6 +67,7 @@
             margin: 0 0 10px 0;
             font-weight: 800;
             background: linear-gradient(to right, #c084fc, #2dd4bf);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -109,63 +110,109 @@
 
         /* New Wrapper for Side-by-Side Layout */
         .content-wrapper {
-            display: flex;
-            gap: 20px;
-            align-items: flex-start;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 25px;
+            align-items: stretch; /* Ensures equal height */
+            height: 750px; /* Fixed height for the dashboard row */
         }
 
-        @media (max-width: 1100px) {
+        @media (max-width: 1200px) {
             .content-wrapper {
+                display: flex;
                 flex-direction: column;
                 align-items: center;
+                height: auto;
             }
             .diagram-container, .workflow-steps, .phone-column {
                 width: 100%;
-                margin-bottom: 20px;
+                margin-bottom: 25px;
+                height: 600px; /* Fallback height on mobile for consistency */
+            }
+            .phone-column {
+                height: auto;
             }
         }
 
         .diagram-container {
-            flex: 2; /* Takes up more space */
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 16px;
-            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 25px;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow-x: auto;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-            min-height: 500px;
+            overflow: hidden; /* Mermaid handles internal scaling usually, or use auto if needed */
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.5), 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            height: 100%;
+            position: relative;
+        }
+
+        /* Add a grid pattern to diagram background */
+        .diagram-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.3;
+            z-index: 0;
+        }
+        .mermaid {
+            z-index: 1;
+            width: 100%;
         }
 
         .workflow-steps {
-            flex: 1; /* Takes up less space */
-            background: rgba(15, 23, 42, 0.5);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid rgba(255,255,255,0.05);
-            max-height: 600px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            height: 100%;
             overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.2) transparent;
+        }
+
+        .workflow-steps::-webkit-scrollbar {
+            width: 6px;
+        }
+        .workflow-steps::-webkit-scrollbar-thumb {
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 3px;
         }
 
         /* Phone Column Styles */
         .phone-column {
-            flex: 1.2; /* Widened for two phones */
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            justify-content: space-between; /* Space out the two phones */
+            align-items: center;
+            height: 100%;
             gap: 20px;
-            flex-wrap: wrap; /* Stack if needed */
+            overflow-y: auto;
+            padding-right: 5px; /* Space for scrollbar if needed */
         }
 
         .phone-mockup {
             width: 100%;
-            max-width: 300px;
-            height: 580px;
+            max-width: 260px;
+            height: 45%; /* occupy ~half of the column height */
+            min-height: 380px;
             background: #1e293b;
             border-radius: 36px;
-            padding: 12px;
-            box-shadow: 0 20px 50px -10px rgba(0,0,0,0.5), inset 0 0 0 2px #334155;
+            padding: 10px;
+            box-shadow: 0 20px 40px -5px rgba(0,0,0,0.4), inset 0 0 0 2px #334155;
             position: relative;
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: transform 0.3s;
+        }
+        
+        .phone-mockup:hover {
+            transform: perspective(1000px) rotateY(0deg) scale(1.02);
+            z-index: 10;
         }
 
         .phone-mockup::before {
@@ -288,18 +335,27 @@
         }
 
         /* Feature Phone Styles */
+        /* Feature Phone Styles */
         .feature-phone-mockup {
             width: 100%;
-            max-width: 220px;
-            height: 480px;
-            background: #334155;
-            border-radius: 30px;
+            max-width: 200px;
+            height: 45%; /* occupy ~half of the column height */
+            min-height: 380px;
+            background: linear-gradient(to bottom, #334155, #1e293b);
+            border-radius: 24px;
             padding: 15px;
-            box-shadow: 0 20px 50px -10px rgba(0,0,0,0.5), inset 0 0 0 2px #475569;
+            box-shadow: 0 20px 40px -5px rgba(0,0,0,0.4), inset 0 0 0 2px #475569;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             align-items: center;
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: transform 0.3s;
+        }
+
+        .feature-phone-mockup:hover {
+            transform: perspective(1000px) rotateY(0deg) scale(1.02);
+            z-index: 10;
         }
 
         .feature-screen-frame {
